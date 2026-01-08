@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%= title %></title>
+    <style>
+      body {
+        font-family: system-ui, -apple-system, Arial;
+        margin: 0;
+      }
+      header {
+        padding: 16px 24px;
+        background: #0b1b2b;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+      }
+      main {
+        padding: 24px;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      .btn {
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: 0;
+        cursor: pointer;
+      }
+      .btn-secondary {
+        background: #eaeaea;
+      }
+      .grid {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: 1fr;
+      }
+      @media (min-width: 1000px) {
+        .grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      .card {
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        padding: 16px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+      }
+      th,
+      td {
+        border-bottom: 1px solid #eee;
+        padding: 8px;
+        text-align: left;
+        vertical-align: top;
+      }
+      th {
+        background: #fafafa;
+      }
+      .muted {
+        color: #666;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div>
+        <strong>Port Russell</strong>
+        <div class="muted">Connecté ✅ (user: <%= userId %>)</div>
+      </div>
+
+      <form method="POST" action="/logout">
+        <button class="btn btn-secondary" type="submit">Se déconnecter</button>
+      </form>
+    </header>
+
+    <main>
+      <h1>Dashboard</h1>
+
+      <div class="grid">
+        <section class="card">
+          <h2>Catways</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Type</th>
+                <th>État</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% catways.forEach(c => { %>
+              <tr>
+                <td><%= c.catwayNumber %></td>
+                <td><%= c.catwayType %></td>
+                <td><%= c.catwayState %></td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="card">
+          <h2>Réservations</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Catway</th>
+                <th>Client</th>
+                <th>Bateau</th>
+                <th>Début</th>
+                <th>Fin</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% reservations.forEach(r => { %>
+              <tr>
+                <td><%= r.catwayNumber %></td>
+                <td><%= r.clientName %></td>
+                <td><%= r.boatName %></td>
+                <td>
+                  <%= new Date(r.startDate).toLocaleDateString("fr-FR") %>
+                </td>
+                <td><%= new Date(r.endDate).toLocaleDateString("fr-FR") %></td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>
