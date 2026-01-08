@@ -8,6 +8,7 @@ const { listCatways } = require("../controllers/catways.controller");
 const requireAuth = require("../middlewares/requireAuth");
 
 const router = express.Router();
+const asyncHandler = require("../middlewares/asyncHandler");
 
 /**
  * Liste des catways (protégé).
@@ -23,6 +24,6 @@ const router = express.Router();
  *         description: OK
  */
 
-router.get("/catways", requireAuth, listCatways);
+router.get("/catways", requireAuth, asyncHandler(listCatways));
 
 module.exports = router;
