@@ -1,29 +1,19 @@
 /**
  * @file routes/api.catways.routes.js
- * @description Routes API Catways.
+ * @description Routes API Catways (CRUD).
  */
 
 const express = require("express");
-const { listCatways } = require("../controllers/catways.controller");
 const requireAuth = require("../middlewares/requireAuth");
+const asyncHandler = require("../middlewares/asyncHandler");
+const c = require("../controllers/catways.controller");
 
 const router = express.Router();
-const asyncHandler = require("../middlewares/asyncHandler");
 
-/**
- * Liste des catways (protégé).
- */
-/**
- * @openapi
- * /api/catways:
- *   get:
- *     summary: Liste tous les catways
- *     description: Retourne la liste des catways (route protégée, nécessite connexion).
- *     responses:
- *       200:
- *         description: OK
- */
-
-router.get("/catways", requireAuth, asyncHandler(listCatways));
+router.get("/catways", requireAuth, asyncHandler(c.listCatways));
+router.get("/catways/:id", requireAuth, asyncHandler(c.getCatway));
+router.post("/catways", requireAuth, asyncHandler(c.createCatway));
+router.put("/catways/:id", requireAuth, asyncHandler(c.updateCatway));
+router.delete("/catways/:id", requireAuth, asyncHandler(c.deleteCatway));
 
 module.exports = router;
