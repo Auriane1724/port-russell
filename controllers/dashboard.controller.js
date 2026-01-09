@@ -1,24 +1,23 @@
 /**
  * @file controllers/dashboard.controller.js
- * @description Contrôleur Dashboard (pages EJS).
+ * @description Dashboard (EJS).
  */
 
-const Catway = require("../models/Catway");
 const Reservation = require("../models/Reservation");
 
-/**
- * Affiche le tableau de bord (catways + reservations).
- * @route GET /dashboard
- */
 async function renderDashboard(req, res) {
-  const catways = await Catway.find().sort({ catwayNumber: 1 });
-  const reservations = await Reservation.find().sort({ startDate: 1 });
+  const today = new Date();
 
-  res.render("dashboard", {
+  const currentReservations = await Reservation.find({
+    startDate: { $lte: today },
+    endDate: { $gte: today },
+  }).sort({ startDate: 1 });
+
+  return res.render("dashboard", {
     title: "Dashboard - Port Russell",
-    userId: req.user.sub,
-    catways,
-    reservations,
+    user: req.user,
+    today,
+    currentReservations,
   });
 }
 

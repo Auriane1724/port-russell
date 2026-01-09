@@ -1,12 +1,13 @@
 /**
  * @file models/User.js
- * @description Modèle utilisateur (authentification).
+ * @description Modèle User (MongoDB / Mongoose).
  */
 
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
   {
+    name: { type: String, required: true, default: "Admin" },
     email: {
       type: String,
       required: true,

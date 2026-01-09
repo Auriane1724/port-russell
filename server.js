@@ -21,6 +21,7 @@ const apiReservationsRoutes = require("./routes/api.reservations.routes");
 const { renderDashboard } = require("./controllers/dashboard.controller");
 const swaggerUi = require("swagger-ui-express");
 const { swaggerSpec } = require("./config/swagger");
+const apiUsersRoutes = require("./routes/api.users.routes");
 
 // Connexion MongoDB
 connectDB(process.env.MONGODB_URI);
@@ -41,6 +42,7 @@ app.use(authRoutes);
 app.use("/api", apiCatwaysRoutes);
 app.use("/api", apiReservationsRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/api", apiUsersRoutes);
 
 // Routes (pour l'instant juste la home)
 app.get("/", (req, res) => {
@@ -50,6 +52,14 @@ app.get("/", (req, res) => {
   });
 });
 app.get("/dashboard", requireAuth, renderDashboard);
+/**
+ * POST /logout
+ * Déconnexion de l'utilisateur
+ */
+app.post("/logout", (req, res) => {
+  res.clearCookie("token");
+  res.redirect("/");
+});
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

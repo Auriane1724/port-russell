@@ -1,21 +1,25 @@
 /**
  * @file middlewares/requireAuth.js
- * @description Middleware de protection des routes (JWT dans cookie).
+ * @description Middleware d'authentification basé sur JWT cookie.
  */
 
 const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 
-/**
- * Protège une route : exige un JWT valide dans le cookie "token".
- * Si absent ou invalide => redirection vers "/".
- */
-function requireAuth(req, res, next) {
+async function requireAuth(req, res, next) {
   try {
     const token = req.cookies?.token;
     if (!token) return res.redirect("/");
 
     const payload = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = payload; // { sub, role, iat, exp }
+
+    const user = await User.findById(payload.sub).select("name email role");
+    if (!user) {
+      res.clearCookie("token");
+      return res.redirect("/");
+    }
+
+    req.user = user;
     return next();
   } catch (e) {
     res.clearCookie("token");
